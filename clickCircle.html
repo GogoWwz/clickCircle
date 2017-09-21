@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<svg id="svg"></svg>
+</body>
+<script>
+	let svg=document.getElementById("svg");
+	svg.setAttribute("width",window.innerWidth);
+	svg.setAttribute("height",window.innerHeight);
+	window.onclick=function(e){
+		//在左侧为空心圆
+		if(e.pageX<window.innerWidth/2){
+			let c=document.createElementNS("http://www.w3.org/2000/svg","circle");
+			c.setAttribute("cx",e.pageX);
+			c.setAttribute("cy",e.pageY);
+			c.setAttribute("r",15);
+			c.setAttribute("stroke-opacity",1);
+			c.setAttribute("fill","transparent");
+			c.setAttribute("stroke",rc(0,255));
+			svg.appendChild(c);
+			let timer=setInterval(()=>{
+					let r= c.getAttribute("r");
+				r*=1.05;
+				c.setAttribute("r",r);
+				let opacity= c.getAttribute("stroke-opacity");
+				opacity*=0.9;
+				c.setAttribute("stroke-opacity",opacity);
+				if(opacity<=0.1){
+					clearInterval(timer);
+					svg.removeChild(c);
+				}
+			},30);
+		}
+		//右侧为实心圆
+		if(e.pageX>window.innerWidth/2){
+			let c=document.createElementNS("http://www.w3.org/2000/svg","circle");
+			c.setAttribute("cx",e.pageX);
+			c.setAttribute("cy",e.pageY);
+			c.setAttribute("r",15);
+			c.setAttribute("fill-opacity",1);
+			c.setAttribute("fill",rc(0,255));
+			svg.appendChild(c);
+			let timer=setInterval(()=>{
+					let r= c.getAttribute("r");
+			r*=1.05;
+			c.setAttribute("r",r);
+			let opacity= c.getAttribute("fill-opacity");
+			opacity*=0.9;
+			c.setAttribute("fill-opacity",opacity);
+			if(opacity<=0.1){
+				clearInterval(timer);
+				svg.removeChild(c);
+			}
+		},30);
+		}
+	}
+
+	/*
+	*生成随机数
+	*/
+	function rn(min,max){
+		return Math.floor(Math.random()*(max-min)+min);
+	}
+
+	/*
+	*生成随机颜色
+	*/
+	function rc(min,max){
+		let r=rn(min,max);
+		let g=rn(min,max);
+		let b=rn(min,max);
+		return `rgb(${r},${g},${b})`;
+	}
+</script>
+</html>
